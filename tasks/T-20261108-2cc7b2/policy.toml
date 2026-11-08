@@ -1,0 +1,59 @@
+task_id = "T-20261108-2cc7b2"
+allowed_paths = ["examples/sample-app/**"]
+test_paths = ["examples/sample-app/tests/**"]
+max_build_rounds = 3
+
+[ai]
+model = "claude-sonnet-5-5"
+effort = "medium"
+timeout_seconds = 600
+max_budget_usd = 1.0
+
+[[grant]]
+action = "ai.run"
+resource = "worktree:T-20261108-2cc7b2"
+
+[[grant]]
+action = "ai.review"
+resource = "worktree:T-20261108-2cc7b2"
+
+[[grant]]
+action = "check.run"
+resource = "check:*"
+
+[[grant]]
+action = "git.commit"
+resource = "branch:task/T-20261108-2cc7b2"
+
+[[grant]]
+action = "git.push"
+resource = "branch:task/T-20261108-2cc7b2"
+
+[[grant]]
+action = "pr.create_draft"
+resource = "repo:wutstack/xx"
+
+[[grant]]
+action = "pr.ready"
+resource = "repo:wutstack/xx"
+
+[[check]]
+name = "test"
+kind = "test"
+argv = ["{python}", "-m", "unittest", "discover", "-s", "examples/sample-app/tests", "-t", "examples/sample-app"]
+timeout_seconds = 120
+image = "sdlc-checks:local"
+
+[[check]]
+name = "lint"
+kind = "lint"
+argv = ["{python}", "-m", "ruff", "check", "--no-cache", "examples/sample-app"]
+timeout_seconds = 120
+image = "sdlc-checks:local"
+
+[[check]]
+name = "build"
+kind = "build"
+argv = ["{python}", "-m", "compileall", "-q", "examples/sample-app"]
+timeout_seconds = 120
+image = "sdlc-checks:local"
