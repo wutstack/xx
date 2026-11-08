@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Static checks on the sample app (no Node required)."""
 
 import json
